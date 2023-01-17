@@ -148,31 +148,44 @@ X = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
 
 
 #Input Layer
-inputLayer = inputLayer(X)
+#inputLayer = inputLayer(X)
 # print(inputLayer.forward(X))
 
 #Linear Layer
-linearLayer = LinearLayer(4, 3)
+#linearLayer = LinearLayer(4, 3)
 # print(linearLayer.forward(X))
 
 #ReLu Layer
-reluLayer = ReLULayer()
+#reluLayer = ReLULayer()
 # print(reluLayer.forward(X))
 
 #Logistic Sigmoid Layer
-logisticSigmoidLayer = LogisticSigmoidLayer()
+#logisticSigmoidLayer = LogisticSigmoidLayer()
 # print(logisticSigmoidLayer.forward(X))
 
 #Softmax Layer
-softmaxLayer = SoftmaxLayer()
+#softmaxLayer = SoftmaxLayer()
 # print(softmaxLayer.forward(X))
 
 #Tanh Layer
-tanhLayer = TanhLayer()
+#tanhLayer = TanhLayer()
 # print(tanhLayer.forward(X))
 
 #Fully Connected Layer
+#fullyConnectedLayer = FullyConnectedLayer(4, 2)
+#print(fullyConnectedLayer.forward(X))
+
+#Input→FC (2 outputs)→Logistic Sigmoid
+inputLayer = inputLayer(X)
 fullyConnectedLayer = FullyConnectedLayer(4, 2)
-print(fullyConnectedLayer.forward(X))
+logisticSigmoidLayer = LogisticSigmoidLayer()
+
+inputLayer.setPrevOut(X)
+fullyConnectedLayer.setPrevIn(inputLayer.forward(X))
+fullyConnectedLayer.setPrevOut(fullyConnectedLayer.forward(X))
+logisticSigmoidLayer.setPrevIn(fullyConnectedLayer.forward(X))
+logisticSigmoidLayer.setPrevOut(logisticSigmoidLayer.forward(X))
+
+print(logisticSigmoidLayer.getPrevOut())
 
 
