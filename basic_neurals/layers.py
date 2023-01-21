@@ -171,3 +171,25 @@ class fullyConnectedLayer(Layer):
 
     def backward(self, gradIn):
         pass
+
+
+class fullyConnectedLayer2(Layer):
+    ## takes in weights and bias from the user
+    def __init__(self, sizeIn, sizeOut, weights, bias) -> None:
+        super().__init__()
+        self.sizeIn = sizeIn
+        self.sizeOut = sizeOut
+        self.weights = weights
+        self.bias = bias
+
+    def forward(self, dataIn):
+        self.setPrevIn(dataIn)
+        dataOut = np.dot(dataIn, self.weights) + self.bias
+        self.setPrevOut(dataOut)
+        return dataOut
+
+    def gradient(self):
+        pass
+
+    def backward(self, gradIn):
+        pass
