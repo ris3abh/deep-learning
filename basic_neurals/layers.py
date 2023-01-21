@@ -155,7 +155,7 @@ class fullyConnectedLayer(Layer):
 
     ## the sizeOut x 1 matrix is the bias vector with elements range of ±10^-4
     def getBias(self):
-        self.bias = np.random.uniform(low = -0.0001, high =  0.0001, size = (self.sizeOut, 1))
+        self.bias = np.random.uniform(low = -0.0001, high =  0.0001, size = (1, self.sizeOut))
 
     def setBias(self, bias):
         self.bias = bias
@@ -171,7 +171,3 @@ class fullyConnectedLayer(Layer):
 
     def backward(self, gradIn):
         pass
-
-
-
-
