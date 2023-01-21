@@ -30,32 +30,18 @@ class Layer (ABC) :
     def backward( self , gradIn ):
         pass
 
+## input layer z scores all the input's
 class inputLayer(Layer):
     def __init__(self, dataIn):
-        self.meanX = np.mean(dataIn, axis=0)
-        self.stdX = np.std(dataIn, axis=0)
-        self.stdX[self.stdX == 0] = 1
+        super().__init__()
+        self.meanX = np.mean(dataIn)
+        self.stdX = np.std(dataIn)
 
     def forward(self, dataIn):
-        return (dataIn - self.meanX) / self.stdX
-
-
-    def gradient(self):
-        pass
-
-    def backward(self,gradIn):
-        pass
-
-class LinearLayer(Layer):
-    def __init__(self, inputSize, outputSize):
-        self.inputSize = inputSize
-        self.outputSize = outputSize
-        self.W = np.random.randn(self.inputSize, self.outputSize) * np.sqrt(2 / self.inputSize)
-        self.b = np.zeros(self.outputSize)
-
-    def forward(self, dataIn):
-        self.setPrevIn(dataIn)
-        return np.dot(dataIn, self.W) + self.b
+        self.prevIn = dataIn
+        dataOut =  (dataIn - self.meanX)/self.stdX
+        self.setprevOut = dataOut
+        return dataOut
 
     def gradient(self):
         pass
@@ -63,13 +49,17 @@ class LinearLayer(Layer):
     def backward(self, gradIn):
         pass
 
-class ReLULayer(Layer):
-    def __init__(self):
-        pass
-
+## linear layer is just linear activation or identity actiavation
+class  LinearLayer(Layer):
+    def __init__(self, dataIn):
+        super().__init__()
+        self.dataIn = dataIn
+    
     def forward(self, dataIn):
         self.setPrevIn(dataIn)
-        return np.maximum(dataIn, 0)
+        dataOut =  dataIn
+        self.setPrevOut(dataOut)
+        return dataOut
 
     def gradient(self):
         pass
@@ -77,13 +67,17 @@ class ReLULayer(Layer):
     def backward(self, gradIn):
         pass
 
-class LogisticSigmoidLayer(Layer):
-    def __init__(self):
-        pass
+## implementing logistic function as the activation function
+class logisticSigmoidLayer(Layer):
+    def __init__(self, dataIn):
+        super().__init__()
+        self.dataIn = dataIn
 
     def forward(self, dataIn):
         self.setPrevIn(dataIn)
-        return 1 / (1 + np.exp(-dataIn))
+        dataOut =  1/(1 + np.exp(-dataIn))
+        self.setPrevOut = dataOut
+        return dataOut
 
     def gradient(self):
         pass
@@ -91,51 +85,86 @@ class LogisticSigmoidLayer(Layer):
     def backward(self, gradIn):
         pass
 
-class SoftmaxLayer(Layer):
-    def __init__(self):
+## RelU will return maximum of 0 and the input dataIn
+class RelULayer(Layer):
+    def __init__(self, dataIn) -> None:
+        super().__init__()
+        self.dataIn = dataIn
+
+    def forward(self, dataIn):
+        self.setPrevIn(dataIn)
+        dataOut = np.maximum(dataIn, 0)
+        self.getPrevOut = dataOut
+        return dataOut
+
+    def gradient(self):
         pass
+
+    def backward(self, gradIn):
+        pass
+
+## I know this one, hard to explain though, but it's the softmax function
+class SoftMaxLayer(Layer):
+    def __init__(self, dataIn):
+        super().__init__()
 
     def forward(self, dataIn):
         self.setPrevIn(dataIn)
         exps = np.exp(dataIn - np.max(dataIn))
-        return exps / np.sum(exps, axis=1, keepdims=True)
+        dataOut = exps / np.sum(exps, axis=1, keepdims=True)
+        self.setPrevOut(dataOut)
+        return dataOut
 
     def gradient(self):
         pass
 
-    def backward(self, gradIn):
+    def backward(self, gradin):
         pass
 
-class TanhLayer(Layer):
-    def __init__(self):
-        pass
+## tanH is the hyperbolic tangent function
+class tanHLayer(Layer):
+    def __init__(self, dataIn):
+        super().__init__()
 
     def forward(self, dataIn):
         self.setPrevIn(dataIn)
-        return np.tanh(dataIn)
+        dataOut =  np.tanh(dataIn)
+        self.setPrevOut(dataOut)
+        return dataOut
 
     def gradient(self):
         pass
 
-    def backward(self, gradIn):
+    def backward(self, dataIn):
         pass
 
-class FullyConnectedLayer(Layer):
-    def __init__(self, sizeIn, sizeOut):
+class fullyConnectedLayer(Layer):
+    def __init__(self, sizeIn, sizeOut) -> None:
+        super().__init__()
         self.sizeIn = sizeIn
         self.sizeOut = sizeOut
-        self.W = np.random.randn(self.sizeIn, self.sizeOut) * np.sqrt(2 / self.sizeIn)
-        self.b = np.zeros(self.sizeOut)
+        self.getWeights()
+        self.getBias()
 
+     ## the sizeIn x sizeOut matrix is the weight matrix with elements range of ±10^-4
     def getWeights(self):
-        return self.W
+        self.weights = np.random.uniform(low = -0.0001, high = 0.0001, size = (self.sizeIn, self.sizeOut))
 
+    def setWeights(self, weights):
+        self.weights = weights
+
+    ## the sizeOut x 1 matrix is the bias vector with elements range of ±10^-4
     def getBias(self):
-        return self.b
+        self.bias = np.random.uniform(low = -0.0001, high =  0.0001, size = (self.sizeOut, 1))
+
+    def setBias(self, bias):
+        self.bias = bias
 
     def forward(self, dataIn):
         self.setPrevIn(dataIn)
-        return np.dot(dataIn, self.W) + self.b
+        dataOut = np.dot(dataIn, self.weights) + self.bias
+        self.setPrevOut(dataOut)
+        return dataOut
 
     def gradient(self):
         pass
@@ -143,49 +172,6 @@ class FullyConnectedLayer(Layer):
     def backward(self, gradIn):
         pass
 
-X = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
 
-
-
-#Input Layer
-#inputLayer = inputLayer(X)
-# print(inputLayer.forward(X))
-
-#Linear Layer
-#linearLayer = LinearLayer(4, 3)
-# print(linearLayer.forward(X))
-
-#ReLu Layer
-#reluLayer = ReLULayer()
-# print(reluLayer.forward(X))
-
-#Logistic Sigmoid Layer
-#logisticSigmoidLayer = LogisticSigmoidLayer()
-# print(logisticSigmoidLayer.forward(X))
-
-#Softmax Layer
-#softmaxLayer = SoftmaxLayer()
-# print(softmaxLayer.forward(X))
-
-#Tanh Layer
-#tanhLayer = TanhLayer()
-# print(tanhLayer.forward(X))
-
-#Fully Connected Layer
-#fullyConnectedLayer = FullyConnectedLayer(4, 2)
-#print(fullyConnectedLayer.forward(X))
-
-#Input→FC (2 outputs)→Logistic Sigmoid
-inputLayer = inputLayer(X)
-fullyConnectedLayer = FullyConnectedLayer(4, 2)
-logisticSigmoidLayer = LogisticSigmoidLayer()
-
-inputLayer.setPrevOut(X)
-fullyConnectedLayer.setPrevIn(inputLayer.forward(X))
-fullyConnectedLayer.setPrevOut(fullyConnectedLayer.forward(X))
-logisticSigmoidLayer.setPrevIn(fullyConnectedLayer.forward(X))
-logisticSigmoidLayer.setPrevOut(logisticSigmoidLayer.forward(X))
-
-print(logisticSigmoidLayer.getPrevOut())
 
 
