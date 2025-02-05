@@ -1,5 +1,6 @@
 ## Neural Network Architecture from Scratch
-This repository is designed for practicing and implementing neural network architectures from scratch. It aims to provide a comprehensive understanding of how neural networks work by building them without relying on high-level frameworks like TensorFlow or PyTorch.
+
+This repository is designed for practicing and implementing neural network architectures from scratch. It aims to provide a comprehensive understanding of how neural networks work by building them without relying on high-level frameworks like TensorFlow or PyTorch. The main objective is to create a baseline and learn about different architectures in Computer Vision, NLP, and other domains.
 
 #### Table of Contents
 1. Project Overview
