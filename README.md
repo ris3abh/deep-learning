@@ -103,12 +103,14 @@ Contributions are welcome! If you would like to contribute, please follow these 
 
 5.1. Fork the Repository:
 Fork this repository to your GitHub account.
+
 5.2. Create a New Branch:
 ```bash
 git checkout -b feature/new-feature
 ```
 5.3. Make Your Changes:
 Implement your new feature or fix.
+
 5.4. Commit and Push:
 ```bash
 git commit -m "Add new feature"
