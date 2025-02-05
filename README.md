@@ -58,7 +58,7 @@ To get started with this repository, follow these steps:
 3.1. Clone the Repository:
 
 ```bash
-git clone https://github.com/yourusername/neural_network.git
+git clone https://github.com/ris3abh/deep-learning.git
 cd neural_network
 ```
 
