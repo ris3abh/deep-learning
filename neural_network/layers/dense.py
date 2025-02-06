@@ -1,3 +1,5 @@
+# layers/dense.py
+
 from ..core.base import Layer
 from ..utils.initializers import xavier_init, he_init, uniform_init
 import numpy as np

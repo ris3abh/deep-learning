@@ -1,3 +1,5 @@
+# utils/initializers.py
+
 import numpy as np
 
 def xavier_init(size_in, size_out):
