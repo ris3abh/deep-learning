@@ -24,3 +24,12 @@ class CrossEntropy:
     
     def gradient(self, Y, Yhat):
         return -np.divide(Y, (Yhat + EPSILON))
+    
+class NegativeLikelihood():
+    def eval(self, y , yhat):
+        yhat = np.clip(yhat, EPSILON, 1 - EPSILON)
+        return -np.mean(y * np.log(yhat) + (1 - y) * np.log(1 - yhat))
+        ## should return a single value
+
+    def gradient(self, y, yhat):
+        return -np.divide(y, yhat + EPSILON) + np.divide((1-y), (1-yhat + EPSILON))
