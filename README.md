@@ -78,10 +78,17 @@ Each directory contains specific components of a neural network. Start with the 
 4.1. Running Examples
 The examples directory contains example scripts for different neural network architectures. You can run these examples to see how the components work together:
 ```bash
-python examples/cnn_example.py
-python examples/gan_example.py
-python examples/autoencoder_example.py
+python3 -m neural_network.examples.cnn_example.py
 ```
+
+```bash
+python3 -m neural_network.examples.gan_example.py
+```
+
+```bash
+python3 -m neural_network.examples.autoencoder_example.py
+```
+
 
 4.1.1. Adding New Components
     To add new layers, activation functions, or architectures, follow the existing structure:
